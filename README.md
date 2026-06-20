@@ -68,3 +68,27 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# 🗳️ Voting System (v1.0)
+
+A secure full-stack voting system built with React and Node.js.
+
+## 🚀 Features
+- Voter registration and authentication
+- Secure vote casting
+- Admin dashboard
+- Real-time vote tracking
+- REST API backend
+
+## 🛠️ Tech Stack
+- Frontend: React.js
+- Backend: Node.js + Express
+- Database: SQLite / MongoDB (depending on your setup)
+
+## 📦 Installation
+
+### Backend
+```bash
+cd backend
+npm install
+node server.js
