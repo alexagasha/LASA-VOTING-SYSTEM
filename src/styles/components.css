@@ -1,0 +1,369 @@
+/* ───────────────────────────────────────────────
+   VOTING SYSTEM - COMPONENT STYLES (UPDATED FIXED VERSION)
+   Includes App.js compatibility classes
+──────────────────────────────────────────────── */
+
+/* ───────────────────────────────────────────────
+   LAYOUT UTILITIES
+──────────────────────────────────────────────── */
+.vs-flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vs-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vs-grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.vs-mb {
+  margin-bottom: 16px;
+}
+
+/* ───────────────────────────────────────────────
+   EMPTY STATES
+──────────────────────────────────────────────── */
+.vs-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--gray-400);
+}
+
+.vs-empty-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+/* ───────────────────────────────────────────────
+   HEADER USER BADGE
+──────────────────────────────────────────────── */
+.vs-user-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: white;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ───────────────────────────────────────────────
+   LOGIN COMPONENT
+──────────────────────────────────────────────── */
+.vs-login {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.vs-login-box {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+}
+
+.vs-login-icon {
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.vs-login-title {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--navy);
+}
+
+.vs-login-sub {
+  font-size: 14px;
+  text-align: center;
+  color: var(--gray-400);
+  margin-bottom: 28px;
+}
+
+.vs-divider {
+  height: 1px;
+  background: var(--gray-100);
+  margin: 20px 0;
+}
+
+/* ───────────────────────────────────────────────
+   MODAL / OVERLAY (STANDARD)
+──────────────────────────────────────────────── */
+.vs-overlay,
+.vs-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.vs-modal {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+  animation: modalIn 0.2s ease-out;
+  box-shadow: var(--shadow-lg);
+}
+
+.vs-modal-content {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.vs-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.vs-modal-sub {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin-bottom: 20px;
+}
+
+/* ───────────────────────────────────────────────
+   VOTING OPTIONS
+──────────────────────────────────────────────── */
+.vs-vote-option {
+  border: 2px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.15s ease;
+}
+
+.vs-vote-option:hover {
+  border-color: var(--teal);
+  background: #F0FDFA;
+}
+
+.vs-vote-option.selected {
+  border-color: var(--teal);
+  background: #F0FDFA;
+}
+
+/* Radio */
+.vs-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vs-radio.checked {
+  border-color: var(--teal);
+}
+
+.vs-radio-inner {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+}
+
+/* ───────────────────────────────────────────────
+   ALERTS
+──────────────────────────────────────────────── */
+.vs-alert {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vs-alert-success {
+  background: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.vs-alert-error {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.vs-alert-info {
+  background: #DBEAFE;
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+}
+
+/* ───────────────────────────────────────────────
+   AUDIT LOG
+──────────────────────────────────────────────── */
+.vs-log-entry {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.vs-log-entry:last-child {
+  border-bottom: none;
+}
+
+.vs-log-time {
+  font-size: 11px;
+  color: var(--gray-400);
+  min-width: 75px;
+  font-family: monospace;
+}
+
+.vs-log-icon {
+  font-size: 16px;
+  min-width: 22px;
+}
+
+.vs-log-text {
+  font-size: 13px;
+  color: var(--gray-700);
+}
+
+.vs-log-detail {
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-top: 2px;
+}
+
+/* ───────────────────────────────────────────────
+   BUTTON GROUPS
+──────────────────────────────────────────────── */
+.vs-btn-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ───────────────────────────────────────────────
+   APP.JS COMPATIBILITY FIXES (IMPORTANT)
+──────────────────────────────────────────────── */
+
+/* Tabs system (fix for vs-tabs / vs-tab) */
+.vs-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--navy-light);
+  padding: 0 20px;
+  overflow-x: auto;
+}
+
+.vs-tab {
+  padding: 12px 18px;
+  border: none;
+  background: transparent;
+  color: var(--gray-400);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+}
+
+.vs-tab:hover {
+  color: white;
+}
+
+.vs-tab.active {
+  color: var(--teal);
+  border-bottom-color: var(--teal);
+}
+
+/* Sections (fix for vs-section) */
+.vs-section {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-100);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Candidates grid (fix for vs-candidates-grid) */
+.vs-candidates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Result rows (fix for vs-result-row) */
+.vs-result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.vs-result-row:last-child {
+  border-bottom: none;
+}
+
+/* ───────────────────────────────────────────────
+   RESPONSIVE
+──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .vs-grid2 {
+    grid-template-columns: 1fr;
+  }
+
+  .vs-login-box {
+    padding: 24px;
+  }
+
+  .vs-candidates-grid {
+    grid-template-columns: 1fr;
+  }
+}
