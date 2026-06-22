@@ -102,9 +102,9 @@ export default function VotingSystem() {
   // ── Load candidates ────────────────────────────────────────────────────────
   const loadCandidates = useCallback(async () => {
     try {
-      const res  = await fetch(`${API}/candidates`);
+      const res  = await fetch(`${API}/results`);
       const data = await res.json();
-      setCandidates(data);
+      setCandidates(Array.isArray(data) ? data : (data.results || data.candidates || []));
     } catch (err) {
       console.error("Failed to load candidates:", err);
     }
@@ -305,7 +305,8 @@ export default function VotingSystem() {
     );
   }
 
-  const totalVotes = candidates.reduce((sum, c) => sum + (c.votes || 0), 0);
+  const safeCandidates = Array.isArray(candidates) ? candidates : [];
+  const totalVotes = safeCandidates.reduce((sum, c) => sum + (c.votes || 0), 0);
 
   return (
     <div className="vs-app">
@@ -392,7 +393,7 @@ export default function VotingSystem() {
             )}
             {electionOpen && !voteSuccess && (
               <div className="vs-candidates-grid">
-                {candidates.map((c) => (
+                {safeCandidates.map((c) => (
                   <div key={c.id} className="vs-candidate-card">
                     <div className="vs-candidate-name">{c.name}</div>
                     <div className="vs-candidate-party">{c.party}</div>
@@ -417,7 +418,7 @@ export default function VotingSystem() {
           <div className="vs-section">
             <h2>Live Results</h2>
             <p style={{ color: "#6B7280" }}>Total votes cast: {totalVotes}</p>
-            {candidates.map((c) => {
+            {safeCandidates.map((c) => {
               const pct = totalVotes > 0
                 ? Math.round((c.votes / totalVotes) * 100)
                 : 0;
