@@ -104,6 +104,13 @@ app.get("/api/voters/count", async (req, res) => {
 
 });
 
+supabase
+  .channel("candidates")
+  .on("postgres_changes", { event: "*", schema: "public", table: "candidates" }, payload => {
+    console.log(payload);
+  })
+  .subscribe();
+
 /**
  * =========================
  * SERVER START

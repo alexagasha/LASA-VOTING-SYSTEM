@@ -13,7 +13,7 @@ async function seed() {
                 name: v.name,
                 email: v.email.trim().toLowerCase(),
                 pin: v.pin,
-                voted: v.voted,
+                voted: 0,
                 role: v.role
             }
         ]);
