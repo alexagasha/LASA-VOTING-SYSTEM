@@ -1,56 +1,67 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db/db");
+const supabase = require("../db/supabase");
 
-router.post("/cast", (req, res) => {
-    const { voter_id, candidate_id } = req.body;
+/**
+ * SAFE VOTING FLOW:
+ * 1. Insert vote (blocked if duplicate)
+ * 2. Atomic increment (RPC)
+ * 3. Mark voter as voted
+ */
 
-    db.get(
-        "SELECT * FROM voters WHERE voter_id = ?",
-        [voter_id],
-        (err, voter) => {
+router.post("/", async (req, res) => {
+    try {
+        const { voter_id, candidate_id } = req.body;
 
-            if (err)
-                return res.status(500).json({ error: err.message });
-
-            if (!voter)
-                return res.status(404).json({
-                    message: "Voter not found"
-                });
-
-            if (voter.voted === 1)
-                return res.status(400).json({
-                    message: "You have already voted"
-                });
-
-            db.run(
-                "INSERT INTO votes(voter_id,candidate_id) VALUES(?,?)",
-                [voter_id, candidate_id],
-                function(err) {
-
-                    if (err)
-                        return res.status(500).json({
-                            error: err.message
-                        });
-
-                    db.run(
-                        "UPDATE candidates SET votes = votes + 1 WHERE id = ?",
-                        [candidate_id]
-                    );
-
-                    db.run(
-                        "UPDATE voters SET voted = 1 WHERE voter_id = ?",
-                        [voter_id]
-                    );
-
-                    res.json({
-                        success: true,
-                        message: "Vote submitted successfully"
-                    });
-                }
-            );
+        if (!voter_id || !candidate_id) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing voter_id or candidate_id"
+            });
         }
-    );
+
+        // 1. INSERT VOTE (double vote protection via UNIQUE constraint)
+        const { error: voteError } = await supabase
+            .from("votes")
+            .insert([{ voter_id, candidate_id }]);
+
+        if (voteError) {
+            return res.status(409).json({
+                success: false,
+                message: "You have already voted"
+            });
+        }
+
+        // 2. ATOMIC INCREMENT (RPC FUNCTION)
+        const { error: rpcError } = await supabase.rpc(
+            "increment_candidate_vote",
+            { candidate: candidate_id }
+        );
+
+        if (rpcError) {
+            return res.status(500).json({
+                success: false,
+                message: rpcError.message
+            });
+        }
+
+        // 3. MARK VOTER AS VOTED
+        await supabase
+            .from("voters")
+            .update({ voted: 1 })
+            .eq("voter_id", voter_id);
+
+        return res.json({
+            success: true,
+            message: "Vote recorded successfully"
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
 });
 
 module.exports = router;

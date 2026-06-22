@@ -1,22 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db/db");
+const supabase = require("../db/supabase");
 
-router.get("/", (req, res) => {
+// GET LIVE RESULTS
+router.get("/", async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from("candidates")
+            .select("*")
+            .order("votes", { ascending: false });
 
-    db.all(
-        "SELECT * FROM candidates ORDER BY votes DESC",
-        [],
-        (err, rows) => {
-
-            if (err)
-                return res.status(500).json({
-                    error: err.message
-                });
-
-            res.json(rows);
+        if (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message
+            });
         }
-    );
+
+        return res.json({
+            success: true,
+            results: data
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
 });
 
 module.exports = router;
