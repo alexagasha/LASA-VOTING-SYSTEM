@@ -102,7 +102,7 @@ export default function VotingSystem() {
   // ── Load candidates ────────────────────────────────────────────────────────
   const loadCandidates = useCallback(async () => {
     try {
-      const res  = await fetch(`${API}/results`);
+      const res  = await fetch(`${API}/candidates`);
       const data = await res.json();
       setCandidates(data);
     } catch (err) {
