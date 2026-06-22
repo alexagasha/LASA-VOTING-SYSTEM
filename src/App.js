@@ -5,7 +5,7 @@ import "./styles/theme.css";
 import "./styles/components.css";
 import "./styles/app-fixes.css";
 
-const API = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API = "http://localhost:5000/api";
 
 const ts = () =>
   new Date().toLocaleTimeString("en-GB", { hour12: false });
@@ -176,7 +176,7 @@ export default function VotingSystem() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loadVoters]);
 
   // ── Logout ─────────────────────────────────────────────────────────────────
   const handleLogout = useCallback(() => {
