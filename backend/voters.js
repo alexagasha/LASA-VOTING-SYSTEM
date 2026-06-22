@@ -161,4 +161,5 @@ module.exports = [
   // ── ADMINISTRATORS ───────────────────────────────────────────────────────────
   { id: "A001", name: "Admin",                email: "agashaalex@gmail.com",           pin: "0000", voted: false, role: "admin" },
   { id: "A002", name: "Admin",                email: "markokello2000@gmail.com",       pin: "1000", voted: false, role: "admin" },
+  { id: "A003", name: "Admin",                email: "onyingeivan523@gmail.com",       pin: "1000", voted: false, role: "admin" },
 ];
