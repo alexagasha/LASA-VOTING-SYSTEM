@@ -8,12 +8,7 @@ const supabase = require("./db/supabase");
 const app = express();
 
 // ── CORS ──────────────────────────────────────────────────
-app.use(cors({
-    origin: [
-        "http://localhost:3000",
-        process.env.FRONTEND_URL
-    ]
-}));
+app.use(cors());
 
 app.use(express.json());
 
