@@ -68,7 +68,22 @@ db.serialize(() => {
 
     insertVoter.finalize();
 
-    console.log("Database initialized and voters seeded.");
+    // Seed candidates
+    const insertCandidate = db.prepare(`
+        INSERT OR IGNORE INTO candidates (id, name, party, votes)
+        VALUES (?, ?, ?, 0)
+    `);
+
+    const candidates = [
+        { id: 1, name: "AMONGI DOLLY DIANA",  party: "Gulu University" },
+        { id: 2, name: "ARAC BENEDICT",        party: "Lira University" },
+        { id: 3, name: "ACENG DELIGHT RUTH",   party: "Uganda Christian University (UCU)" },
+    ];
+
+    candidates.forEach(c => insertCandidate.run(c.id, c.name, c.party));
+    insertCandidate.finalize();
+
+    console.log("Database initialized, voters and candidates seeded.");
 });
 
 /**
@@ -140,19 +155,6 @@ app.get("/api/voters/count", (req, res) => {
         }
     );
 });
-
-/**
- * =========================
- * START SERVER
- * =========================
- */
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
-});
-
-app.use("/api/auth", authRoutes);
-app.use("/api/vote", voteRoutes);
-app.use("/api/results", resultRoutes);
 
 /**
  * =========================
