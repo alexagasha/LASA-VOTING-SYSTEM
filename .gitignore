@@ -45,3 +45,6 @@ node_modules/
 backend/node_modules/
 backend/database.db
 .env
+
+# Tell Vercel to ignore backend
+backend/node_modules/
