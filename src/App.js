@@ -5,7 +5,7 @@ import "./styles/theme.css";
 import "./styles/components.css";
 import "./styles/app-fixes.css";
 
-const API = "http://localhost:5000/api/candidates"; // Adjust this if your backend runs on a different port or path
+const API = process.env.REACT_APP_API_URL || "http://localhost:5000/api"; // Adjust this if your backend runs on a different port or path
 
 const ts = () =>
   new Date().toLocaleTimeString("en-GB", { hour12: false });
