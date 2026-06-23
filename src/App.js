@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 import "./styles/global.css";
 import "./styles/theme.css";
@@ -622,6 +623,7 @@ export default function VotingSystem() {
           <div className="vs-spinner" />
         </div>
       )}
+      <SpeedInsights />
     </div>
   );
 }
