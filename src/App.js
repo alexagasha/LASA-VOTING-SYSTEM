@@ -102,9 +102,9 @@ export default function VotingSystem() {
   // ── Load candidates ────────────────────────────────────────────────────────
   const loadCandidates = useCallback(async () => {
     try {
-      const res  = await fetch(`${API}/results`);
+      const res  = await fetch(`${API}/candidates`);
       const data = await res.json();
-      setCandidates(Array.isArray(data) ? data : (data.results || data.candidates || []));
+      setCandidates(data);
     } catch (err) {
       console.error("Failed to load candidates:", err);
     }
@@ -115,7 +115,7 @@ export default function VotingSystem() {
     try {
       const res  = await fetch(`${API}/voters`);
       const data = await res.json();
-      setVoters(data);
+      setVoters(Array.isArray(data) ? data : (data.voters || []));
     } catch (err) {
       console.error("Failed to load voters:", err);
     }
@@ -305,7 +305,6 @@ export default function VotingSystem() {
     );
   }
 
-  const safeCandidates = Array.isArray(candidates) ? candidates : [];
   const totalVotes = safeCandidates.reduce((sum, c) => sum + (c.votes || 0), 0);
 
   return (
@@ -358,7 +357,7 @@ export default function VotingSystem() {
                 {electionOpen ? "Open" : "Closed"}
               </strong>
             </p>
-            <p>Total candidates: {candidates.length}</p>
+            <p>Total candidates: {safeCandidates.length}</p>
             <p>Total votes cast: {totalVotes}</p>
 
             {voteSuccess && (
@@ -533,7 +532,7 @@ export default function VotingSystem() {
             <div className="vs-divider" style={{ margin: "24px 0" }} />
 
             <div className="vs-flex-between vs-mb">
-              <h3 style={{ margin: 0 }}>Registered Voters ({voters.length})</h3>
+              <h3 style={{ margin: 0 }}>Registered Voters ({safeVoters.length})</h3>
               <button className="vs-btn vs-btn-outline" onClick={loadVoters}>
                 🔄 Refresh
               </button>
@@ -550,7 +549,7 @@ export default function VotingSystem() {
                 </tr>
               </thead>
               <tbody>
-                {voters.map((v) => (
+                {safeVoters.map((v) => (
                   <tr key={v.voter_id}>
                     <td style={{ fontFamily: "monospace", fontSize: "12px" }}>{v.voter_id}</td>
                     <td>{v.name}</td>
@@ -576,7 +575,7 @@ export default function VotingSystem() {
               </tbody>
             </table>
 
-            {voters.length === 0 && (
+            {safeVoters.length === 0 && (
               <p style={{ color: "#9CA3AF", marginTop: "12px" }}>No voters registered yet.</p>
             )}
           </div>
