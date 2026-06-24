@@ -3,13 +3,16 @@ const router = express.Router();
 const supabase = require("../db/supabase");
 
 /**
+ * POST /api/vote/cast
+ * Body: { voter_id, candidate_id }
+ *
  * SAFE VOTING FLOW:
- * 1. Insert vote (blocked if duplicate)
- * 2. Atomic increment (RPC)
- * 3. Mark voter as voted
+ * 1. Check voter exists and hasn't voted
+ * 2. Insert vote record
+ * 3. Increment candidate vote count
+ * 4. Mark voter as voted
  */
-
-router.post("/", async (req, res) => {
+router.post("/cast", async (req, res) => {
     try {
         const { voter_id, candidate_id } = req.body;
 
@@ -20,7 +23,28 @@ router.post("/", async (req, res) => {
             });
         }
 
-        // 1. INSERT VOTE (double vote protection via UNIQUE constraint)
+        // 1. Check voter exists and hasn't already voted
+        const { data: voter, error: voterErr } = await supabase
+            .from("voters")
+            .select("voter_id, voted")
+            .eq("voter_id", voter_id)
+            .single();
+
+        if (voterErr || !voter) {
+            return res.status(404).json({
+                success: false,
+                message: "Voter not found"
+            });
+        }
+
+        if (voter.voted === 1) {
+            return res.status(409).json({
+                success: false,
+                message: "You have already voted"
+            });
+        }
+
+        // 2. Insert vote record
         const { error: voteError } = await supabase
             .from("votes")
             .insert([{ voter_id, candidate_id }]);
@@ -32,20 +56,33 @@ router.post("/", async (req, res) => {
             });
         }
 
-        // 2. ATOMIC INCREMENT (RPC FUNCTION)
-        const { error: rpcError } = await supabase.rpc(
-            "increment_candidate_vote",
-            { candidate: candidate_id }
-        );
+        // 3. Increment candidate vote count (read-then-write, no RPC needed)
+        const { data: cand, error: candReadErr } = await supabase
+            .from("candidates")
+            .select("votes")
+            .eq("id", candidate_id)
+            .single();
 
-        if (rpcError) {
-            return res.status(500).json({
+        if (candReadErr || !cand) {
+            return res.status(404).json({
                 success: false,
-                message: rpcError.message
+                message: "Candidate not found"
             });
         }
 
-        // 3. MARK VOTER AS VOTED
+        const { error: candUpdateErr } = await supabase
+            .from("candidates")
+            .update({ votes: (cand.votes || 0) + 1 })
+            .eq("id", candidate_id);
+
+        if (candUpdateErr) {
+            return res.status(500).json({
+                success: false,
+                message: candUpdateErr.message
+            });
+        }
+
+        // 4. Mark voter as voted
         await supabase
             .from("voters")
             .update({ voted: 1 })
