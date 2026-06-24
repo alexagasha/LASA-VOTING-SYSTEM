@@ -1,305 +1,241 @@
-/* ─────────────────────────────────────────────────────────────
-   APP.JS COMPATIBILITY PATCH
-   Adds every class App.js references that theme.css / components.css
-   / global.css do not define. Import this AFTER the other three files.
+/* ═══════════════════════════════════════════════════════════════
+   LASA SecureVote — Mobile Responsive Optimisation
+   Append/merge into src/styles/app-fixes.css
+═══════════════════════════════════════════════════════════════ */
 
-   In App.js:
-     import "./styles/global.css";
-     import "./styles/theme.css";
-     import "./styles/components.css";
-     import "./styles/app-fixes.css";   <-- add this line
-───────────────────────────────────────────────────────────── */
-
-/* ───────────────────────────────────────────────
-   HEADER (App.js uses vs-header-title / vs-header-actions,
-   theme.css only styled vs-logo / vs-logo-text)
-──────────────────────────────────────────────── */
-.vs-header-title {
-  color: white;
-  font-size: 18px;
-  font-weight: 700;
+/* ── Base: prevent horizontal scroll & set touch-friendly sizing ── */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
-.vs-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
-/* Bare .vs-badge used without a color modifier in App.js header */
-.vs-badge {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.12);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 99px;
-  font-size: 12px;
-  font-weight: 600;
+.vs-app {
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* ───────────────────────────────────────────────
-   BUTTON VARIANT MISSING FROM theme.css
-──────────────────────────────────────────────── */
-.vs-btn-success {
-  background: var(--green);
-  color: white;
-}
-
-.vs-btn-success:hover {
-  filter: brightness(0.92);
-}
-
-/* ───────────────────────────────────────────────
-   TABS — App.js renders .vs-tabs / .vs-tab / .vs-tab-active
-   components.css defined .vs-tabs/.vs-tab but used ".active"
-   not ".vs-tab-active" — App.js needs the latter to work
-──────────────────────────────────────────────── */
-.vs-tabs {
-  display: flex;
-  gap: 4px;
-  background: var(--navy-light);
-  padding: 0 32px;
-  overflow-x: auto;
-}
-
-.vs-tab {
-  padding: 12px 20px;
-  border: none;
-  background: transparent;
-  color: var(--gray-400);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-  transition: color var(--transition-fast), border-color var(--transition-fast);
-}
-
-.vs-tab:hover {
-  color: white;
-}
-
-.vs-tab-active,
-.vs-tab.active {
-  color: var(--teal);
-  border-bottom-color: var(--teal);
-}
-
-/* ───────────────────────────────────────────────
-   SECTION WRAPPER (App.js wraps every tab's content
-   in <div className="vs-section">)
-──────────────────────────────────────────────── */
-.vs-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  background: var(--white);
-  border: 1px solid var(--gray-100);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: 24px;
-  margin-bottom: 20px;
-}
-
-.vs-section h2 {
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-
-.vs-section p {
-  margin-bottom: 8px;
-  color: var(--gray-600);
-}
-
-/* ───────────────────────────────────────────────
-   MAIN WRAPPER — App.js uses <main className="vs-main">
-   directly around vs-section, needs page padding
-──────────────────────────────────────────────── */
-.vs-main {
-  padding: 28px 32px;
-}
-
-/* ───────────────────────────────────────────────
-   CANDIDATE CARDS (vote tab) — App.js needs a CARD
-   layout, but components.css/theme.css only have
-   .vs-candidate as a horizontal ROW for results
-──────────────────────────────────────────────── */
-.vs-candidates-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 18px;
-  margin-top: 16px;
-}
-
-.vs-candidate-card {
-  border: 1.5px solid var(--gray-100);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  text-align: center;
-  background: var(--white);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.vs-candidate-card:hover {
-  border-color: var(--teal);
-  box-shadow: var(--shadow-sm);
-}
-
-.vs-candidate-card .vs-candidate-name {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--gray-800);
-  margin-bottom: 4px;
-}
-
-.vs-candidate-card .vs-candidate-party {
-  font-size: 13px;
-  color: var(--gray-400);
-  margin-bottom: 14px;
-}
-
-/* ───────────────────────────────────────────────
-   RESULTS ROW — App.js uses vs-result-row >
-   vs-result-label (flex-between text) +
-   vs-result-bar-track > vs-result-bar-fill
-   (theme.css/components.css only have generic
-   vs-bar-track/vs-bar-fill, never wired to these names)
-──────────────────────────────────────────────── */
-.vs-result-row {
-  padding: 14px 0;
-  border-bottom: 1px solid var(--gray-100);
-}
-
-.vs-result-row:last-child {
-  border-bottom: none;
-}
-
-.vs-result-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
-
-.vs-result-label span:first-child {
-  font-weight: 600;
-  color: var(--gray-800);
-}
-
-.vs-result-label span:last-child {
-  color: var(--gray-400);
-  font-size: 13px;
-}
-
-.vs-result-bar-track {
-  height: 10px;
-  background: var(--gray-100);
-  border-radius: 99px;
-  overflow: hidden;
-}
-
-.vs-result-bar-fill {
-  height: 100%;
-  background: var(--teal);
-  border-radius: 99px;
-  transition: width 0.8s ease;
-}
-
-/* ───────────────────────────────────────────────
-   ALERT VARIANT MISSING — App.js uses
-   vs-alert-warning, components.css only has
-   success/error/info
-──────────────────────────────────────────────── */
-.vs-alert-warning {
-  background: #FEF3C7;
-  color: #92400E;
-  border: 1px solid #FDE68A;
-}
-
-/* ───────────────────────────────────────────────
-   MODAL ACTIONS ROW — App.js wraps the two modal
-   buttons in <div className="vs-modal-actions">,
-   never defined anywhere
-──────────────────────────────────────────────── */
-.vs-modal-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.vs-modal-actions .vs-btn {
-  flex: 1;
-  justify-content: center;
-}
-
-/* ───────────────────────────────────────────────
-   AUDIT LIST — App.js renders <ul className="vs-audit-list">
-──────────────────────────────────────────────── */
-.vs-audit-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 12px;
-}
-
-.vs-audit-list li {
-  padding: 8px 12px;
-  background: var(--off-white);
-  border-radius: var(--radius-sm);
-  color: var(--gray-700);
-}
-
-/* ───────────────────────────────────────────────
-   LOADING OVERLAY + SPINNER — App.js shows this
-   during any fetch, never defined anywhere
-──────────────────────────────────────────────── */
-.vs-loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 31, 61, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.vs-spinner {
-  width: 42px;
-  height: 42px;
-  border: 4px solid rgba(255, 255, 255, 0.35);
-  border-top-color: var(--teal);
-  border-radius: 50%;
-  animation: vs-spin 0.8s linear infinite;
-}
-
-@keyframes vs-spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ───────────────────────────────────────────────
-   LOGIN FORM HELPERS — LoginScreen in App.js uses
-   vs-form-group / vs-label, defined nowhere
-   (components.css/theme.css only style .vs-input)
-──────────────────────────────────────────────── */
-.vs-form-group {
-  margin-bottom: 14px;
-}
-
-.vs-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--gray-600);
-  margin-bottom: 5px;
-}
-
-/* ───────────────────────────────────────────────
-   RESPONSIVE
-──────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   TABLET & BELOW  (≤ 768px)
+═══════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .vs-main { padding: 16px; }
-  .vs-section { padding: 18px; }
-  .vs-candidates-grid { grid-template-columns: 1fr; }
-  .vs-header-actions { gap: 8px; flex-wrap: wrap; }
+
+  /* Header stacks and wraps */
+  .vs-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+  }
+
+  .vs-header-title {
+    font-size: 16px;
+  }
+
+  .vs-header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .vs-header-actions .vs-btn {
+    flex: 1;
+    min-width: 0;
+    justify-content: center;
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .vs-badge {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* Tabs scroll horizontally instead of wrapping awkwardly */
+  .vs-tabs {
+    padding: 0 8px;
+    gap: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .vs-tabs::-webkit-scrollbar { display: none; }
+
+  .vs-tab {
+    padding: 12px 14px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  /* Main content padding */
+  .vs-main {
+    padding: 16px 12px;
+  }
+
+  .vs-section {
+    padding: 18px 14px;
+  }
+
+  .vs-section h2 {
+    font-size: 18px;
+  }
+
+  /* Candidate cards stack to single column */
+  .vs-candidates-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .vs-candidate-card {
+    padding: 16px;
+  }
+
+  /* Login box fits small screens */
+  .vs-login {
+    padding: 16px;
+  }
+
+  .vs-login-box {
+    padding: 28px 20px;
+  }
+
+  .vs-login-title {
+    font-size: 22px;
+  }
+
+  /* Modal fits screen with margin */
+  .vs-modal {
+    padding: 24px 18px;
+    max-width: 92vw;
+  }
+
+  .vs-modal-actions {
+    flex-direction: column;
+  }
+
+  .vs-modal-actions .vs-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Admin table → horizontal scroll wrapper ── */
+  .vs-table {
+    font-size: 12px;
+  }
+
+  .vs-table th,
+  .vs-table td {
+    padding: 8px 6px;
+  }
+
+  /* Hide email column on small screens to save space */
+  .vs-table th:nth-child(3),
+  .vs-table td:nth-child(3) {
+    display: none;
+  }
+
+  /* Results bars */
+  .vs-result-label {
+    font-size: 13px;
+  }
+
+  /* Audit log entries wrap */
+  .vs-audit-list li {
+    font-size: 11px;
+    word-break: break-word;
+  }
+
+  /* Inputs are touch-friendly (prevents iOS zoom on focus) */
+  .vs-input {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  /* Buttons easier to tap */
+  .vs-btn {
+    min-height: 44px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PHONES  (≤ 480px)
+═══════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  .vs-header-title {
+    font-size: 15px;
+  }
+
+  .vs-tab {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .vs-section {
+    padding: 16px 12px;
+    border-radius: 10px;
+  }
+
+  .vs-section h2 {
+    font-size: 17px;
+  }
+
+  .vs-section p {
+    font-size: 13px;
+  }
+
+  .vs-login-box {
+    padding: 24px 16px;
+  }
+
+  .vs-candidate-name {
+    font-size: 15px;
+  }
+
+  /* Make the admin table wrap in a scrollable container */
+  .vs-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Stat/number text scales down */
+  .vs-stat-value {
+    font-size: 26px;
+  }
+
+  /* Confirm modal text */
+  .vs-modal h3 {
+    font-size: 18px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VERY SMALL PHONES  (≤ 360px)
+═══════════════════════════════════════════════════════════════ */
+@media (max-width: 360px) {
+  .vs-header-actions .vs-btn {
+    font-size: 11px;
+    padding: 7px 8px;
+  }
+
+  .vs-tab {
+    padding: 9px 10px;
+    font-size: 11px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LANDSCAPE PHONE — keep login usable
+═══════════════════════════════════════════════════════════════ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .vs-login {
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 }
