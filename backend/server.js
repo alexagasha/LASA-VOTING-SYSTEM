@@ -9,6 +9,7 @@ const app = express();
 
 // ── CORS ──────────────────────────────────────────────────
 app.use(cors());
+app.options("*", cors());  // handle preflight for all routes
 
 app.use(express.json());
 
