@@ -394,8 +394,29 @@ export default function VotingSystem() {
               <div className="vs-candidates-grid">
                 {safeCandidates.map((c) => (
                   <div key={c.id} className="vs-candidate-card">
+                    <div className="vs-candidate-avatar">
+                      {c.photo ? (
+                        <img
+                          src={c.photo}
+                          alt={c.name}
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            e.target.nextSibling.style.display = "flex";
+                          }}
+                        />
+                      ) : null}
+                      <div
+                        className="vs-candidate-avatar-fallback"
+                        style={{ display: c.photo ? "none" : "flex" }}
+                      >
+                        {c.name ? c.name.charAt(0) : "?"}
+                      </div>
+                    </div>
                     <div className="vs-candidate-name">{c.name}</div>
                     <div className="vs-candidate-party">{c.party}</div>
+                    {c.slogan && (
+                      <div className="vs-candidate-slogan">"{c.slogan}"</div>
+                    )}
                     <button
                       className="vs-btn vs-btn-primary"
                       onClick={() => {
@@ -587,6 +608,11 @@ export default function VotingSystem() {
         <div className="vs-modal-overlay">
           <div className="vs-modal">
             <h3>Confirm Your Vote</h3>
+            {selectedCand.photo && (
+              <div className="vs-modal-avatar">
+                <img src={selectedCand.photo} alt={selectedCand.name} />
+              </div>
+            )}
             <p>
               You are voting for <strong>{selectedCand.name}</strong>
               {selectedCand.party ? ` — ${selectedCand.party}` : ""}.

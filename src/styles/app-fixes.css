@@ -239,3 +239,130 @@ html, body {
     padding-bottom: 20px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   LASA SecureVote — Candidate Photo Cards + Modern Restyle
+   Afropolitan / kente accent: crimson #8F000D · gold #DAA520 · green #005106
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Candidate photo avatar (circular, gold ring) ── */
+.vs-candidate-avatar {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #DAA520;
+  box-shadow: 0 4px 14px rgba(143, 0, 13, 0.18);
+  background: #f3f4f6;
+}
+
+.vs-candidate-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Fallback initial when no photo / image fails */
+.vs-candidate-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #8F000D 0%, #b91c1c 100%);
+}
+
+/* ── Candidate card — centered, lifts on hover ── */
+.vs-candidate-card {
+  text-align: center;
+  padding: 24px 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+.vs-candidate-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  border-radius: 16px 16px 0 0;
+  background: repeating-linear-gradient(
+    90deg,
+    #8F000D 0px, #8F000D 16px,
+    #DAA520 16px, #DAA520 32px,
+    #005106 32px, #005106 48px
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.vs-candidate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  border-color: #DAA520;
+}
+
+.vs-candidate-card:hover::before {
+  opacity: 1;
+}
+
+.vs-candidate-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.vs-candidate-party {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.vs-candidate-slogan {
+  font-size: 13px;
+  font-style: italic;
+  color: #8F000D;
+  margin-bottom: 16px;
+  min-height: 18px;
+}
+
+.vs-candidate-card .vs-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ── Vote confirmation modal avatar ── */
+.vs-modal-avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #DAA520;
+}
+
+.vs-modal-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Mobile sizing for avatars ── */
+@media (max-width: 480px) {
+  .vs-candidate-avatar {
+    width: 80px;
+    height: 80px;
+  }
+  .vs-candidate-avatar-fallback {
+    font-size: 32px;
+  }
+}
