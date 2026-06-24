@@ -1,20 +1,25 @@
 require("dotenv").config();
-
 const express  = require("express");
 const cors     = require("cors");
-const supabase = require("./db/supabase");
-
 const authRoutes   = require("./routes/auth");
 const voteRoutes   = require("./routes/vote");
 const resultRoutes = require("./routes/results");
-
+const supabase = require("./db/supabase");
 const app = express();
 
-// ── CORS — allow all origins + handle preflight ──────────
+// ── CORS ──────────────────────────────────────────────────
 app.use(cors());
-app.options("*", cors());
 
 app.use(express.json());
+
+// ── Keep-alive ping (prevents Render free tier sleep) ─────
+const https = require("https");
+const BACKEND_URL = process.env.RENDER_EXTERNAL_URL || "";
+if (BACKEND_URL) {
+    setInterval(() => {
+        https.get(BACKEND_URL).on("error", () => {});
+    }, 10 * 60 * 1000);
+}
 
 // ── Health check ──────────────────────────────────────────
 app.get("/", (req, res) => {
