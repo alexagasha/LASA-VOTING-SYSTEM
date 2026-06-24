@@ -331,8 +331,8 @@ export default function VotingSystem() {
 
       {/* Tabs */}
       <nav className="vs-tabs">
-        {["dashboard", "vote", "results", "audit",
-          ...(currentUser.role === "admin" ? ["admin"] : [])
+        {["dashboard", "vote", "results",
+          ...(currentUser.role === "admin" ? ["audit", "admin"] : [])
         ].map((t) => (
           <button
             key={t}
@@ -447,7 +447,7 @@ export default function VotingSystem() {
         )}
 
         {/* AUDIT */}
-        {tab === "audit" && (
+        {tab === "audit" && currentUser.role === "admin" && (
           <div className="vs-section">
             <h2>Audit Log</h2>
             {auditLog.length === 0 ? (
