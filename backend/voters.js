@@ -158,6 +158,51 @@ module.exports = [
   { id: "V106", name: "OPIO LAZARUS",         email: "opiolazarus256@gmail.com",       pin: "1234", voted: false, role: "voter" },
   { id: "V107", name: "AKULLU SARAH LORNA",   email: "akullosarahlorna@gmail.com",     pin: "1234", voted: false, role: "voter" },
 
+
+  // ── EBENEZER UNIVERSITY ──
+  { id: "V108", name: "AWOR BENITA", email: "andraaworbenita@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V109", name: "DANIELA FAITH", email: "aniedanz2001@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V110", name: "OKELLO FRANK", email: "frankokello28@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V111", name: "OCAYA R.", email: "rjocaya.educ@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V112", name: "OGWOK BISMARK", email: "bismarkogwok@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── CLARK INTERNATIONAL UNIVERSITY ──
+  { id: "V113", name: "GANG DANIEL", email: "gangdaniel3@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── UGANDA COLLEGE OF COMMERCE ADUKU ──
+  { id: "V114", name: "NGWECH WINNIE", email: "ngwechwinnie1@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V115", name: "ACENG DAISY EVE", email: "cengdaisyeve@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V116", name: "OLOBO ALEX", email: "oloboalex3g@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── MBARARA UNIVERSITY OF SCIENCE AND TECHNOLOGY ──
+  { id: "V117", name: "BALIMO SCAR", email: "balimoscar3@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V118", name: "NEN JONATHAN", email: "nenjonathan255@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── MAKERERE UNIVERSITY ──
+  { id: "V119", name: "OLLUKE JONATHAN", email: "ollukejonathan@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── MAKERERE UNIVERSITY MAIN ──
+  { id: "V120", name: "NGOLE SHADRACK", email: "ngoleshadrack98@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── VICTORIA UNIVERSITY ──
+  { id: "V121", name: "UDITH ACEN", email: "udithacen2017@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V122", name: "OCAN AMBROSE", email: "docambrose93@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V123", name: "OCAN EMMANUEL", email: "mmanuelocan643@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── CAVENDISH UNIVERSITY ──
+  { id: "V124", name: "CAN MARGARET", email: "canmargaret2000@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V125", name: "LWII JORDAN", email: "lwiijordan51@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V126", name: "AKELLO ELIZABETH", email: "lizabethakello246@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── GULU UNIVERSITY ──
+  { id: "V127", name: "OGWANG CEASER", email: "ceaserogwang75@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V128", name: "OKELLO OYUGI", email: "okellooyugi@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V129", name: "OBONG SOLOMON", email: "obongsolomon1994@gmail.com", pin: "1234", voted: false, role: "voter" },
+  { id: "V130", name: "NONO GODFREY", email: "nonogodfrey0@gmail.com", pin: "1234", voted: false, role: "voter" },
+
+  // ── LIRA DISTRICT LOCAL GOVERNMENT ──
+  { id: "V131", name: "MORGAN OMARA FRANK", email: "morganomarafrank@gmail.com", pin: "1234", voted: false, role: "voter" },
+
   // ── ADMINISTRATORS ───────────────────────────────────────────────────────────
   { id: "A001", name: "Admin",                email: "agashaalex@gmail.com",           pin: "0000", voted: false, role: "admin" },
   { id: "A002", name: "Admin",                email: "markokello2000@gmail.com",       pin: "1000", voted: false, role: "admin" },
