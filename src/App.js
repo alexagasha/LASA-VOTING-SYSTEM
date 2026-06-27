@@ -4,6 +4,7 @@ import "./styles/global.css";
 import "./styles/theme.css";
 import "./styles/components.css";
 import "./styles/app-fixes.css";
+import CANDIDATE_PHOTOS from "./candidatePhotos";
 
 const API = process.env.REACT_APP_API_URL || "http://localhost:5000/api"; // Adjust this if your backend runs on a different port or path
 
@@ -104,7 +105,11 @@ export default function VotingSystem() {
     try {
       const res  = await fetch(`${API}/candidates`);
       const data = await res.json();
-      setCandidates(data);
+      setCandidates(
+        Array.isArray(data)
+          ? data.map((c) => ({ ...c, photo: CANDIDATE_PHOTOS[c.id] || c.photo }))
+          : data
+      );
     } catch (err) {
       console.error("Failed to load candidates:", err);
     }
