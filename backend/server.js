@@ -145,6 +145,49 @@ app.post("/api/election/status", async (req, res) => {
     res.json({ election_open: data.election_open });
 });
 
+
+/**
+ * =========================
+ * AUDIT LOG — who voted for whom and when
+ * =========================
+ */
+app.get("/api/audit", async (req, res) => {
+    // Get all vote records (ordered newest first)
+    const { data: votes, error: votesErr } = await supabase
+        .from("votes")
+        .select("voter_id, candidate_id, vote_time")
+        .order("vote_time", { ascending: false });
+
+    if (votesErr) {
+        return res.status(500).json({ error: votesErr.message });
+    }
+
+    // Get voter names and candidate names to join
+    const { data: voters } = await supabase
+        .from("voters")
+        .select("voter_id, name, email");
+
+    const { data: candidates } = await supabase
+        .from("candidates")
+        .select("id, name");
+
+    const voterMap = {};
+    (voters || []).forEach(v => { voterMap[v.voter_id] = v; });
+
+    const candMap = {};
+    (candidates || []).forEach(c => { candMap[c.id] = c.name; });
+
+    const audit = (votes || []).map(v => ({
+        voter_id:   v.voter_id,
+        voter_name: voterMap[v.voter_id] ? voterMap[v.voter_id].name : "Unknown",
+        voter_email: voterMap[v.voter_id] ? voterMap[v.voter_id].email : "",
+        candidate:  candMap[v.candidate_id] || `Candidate ${v.candidate_id}`,
+        vote_time:  v.vote_time
+    }));
+
+    res.json(audit);
+});
+
 supabase
   .channel("candidates")
   .on("postgres_changes", { event: "*", schema: "public", table: "candidates" }, payload => {

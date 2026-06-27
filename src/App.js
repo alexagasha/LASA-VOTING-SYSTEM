@@ -138,10 +138,28 @@ export default function VotingSystem() {
     }
   }, []);
 
+  // ── Load audit log (real votes from database) ─────────────────────────────
+  const loadAudit = useCallback(async () => {
+    try {
+      const res = await fetch(`${API}/audit`);
+      const data = await res.json();
+      setAuditLog(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to load audit log:", err);
+    }
+  }, []);
+
   useEffect(() => {
     loadCandidates();
     loadElectionStatus();
   }, [loadCandidates, loadElectionStatus]);
+
+  // Auto-load real audit data when an admin opens the Audit tab
+  useEffect(() => {
+    if (tab === "audit" && currentUser && currentUser.role === "admin") {
+      loadAudit();
+    }
+  }, [tab, currentUser, loadAudit]);
 
   // ── Login — POST /api/auth/login with { email, pin } ──────────────────────
   const handleLogin = useCallback(async (email, pin) => {
@@ -325,6 +343,9 @@ export default function VotingSystem() {
 
   const safeCandidates = Array.isArray(candidates) ? candidates : [];
   const safeVoters = Array.isArray(voters) ? voters : [];
+  const safeAudit = Array.isArray(auditLog)
+    ? auditLog.filter((e) => e && typeof e === "object" && e.candidate)
+    : [];
 
   const toggleElection = async () => {
     const next = !electionOpen;
@@ -510,24 +531,67 @@ export default function VotingSystem() {
         {/* AUDIT */}
         {tab === "audit" && currentUser.role === "admin" && (
           <div className="vs-section">
-            <h2>Audit Log</h2>
-            {auditLog.length === 0 ? (
-              <p style={{ color: "#9CA3AF" }}>No events recorded this session.</p>
+            <div className="vs-flex-between vs-mb">
+              <h2 style={{ margin: 0 }}>Audit Log — Who Voted</h2>
+              <button className="vs-btn vs-btn-outline" onClick={loadAudit}>
+                🔄 Refresh
+              </button>
+            </div>
+            <p style={{ color: "#6B7280", marginBottom: "16px" }}>
+              Total votes cast: <strong>{safeAudit.length}</strong>
+            </p>
+            {safeAudit.length === 0 ? (
+              <p style={{ color: "#9CA3AF" }}>
+                No votes recorded yet. Click Refresh to load.
+              </p>
             ) : (
-              <ul className="vs-audit-list">
-                {auditLog.map((entry, i) => (
-                  <li key={i} style={{ fontFamily: "monospace", fontSize: "13px" }}>
-                    {entry}
-                  </li>
-                ))}
-              </ul>
+              <div style={{ overflowX: "auto" }}>
+                <table className="vs-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Voter</th>
+                      <th>Voted For</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {safeAudit.map((entry, i) => (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>{entry.voter_name || entry.voter_id}</td>
+                        <td>{entry.candidate}</td>
+                        <td>
+                          {entry.vote_time
+                            ? new Date(entry.vote_time).toLocaleString("en-GB")
+                            : "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
-            {auditLog.length > 0 && (
+            {safeAudit.length > 0 && (
               <button
                 className="vs-btn vs-btn-outline"
                 style={{ marginTop: "12px" }}
                 onClick={() =>
-                  exportCSV(auditLog.map((e) => [e]), "lasa_audit_log.csv")
+                  exportCSV(
+                    [
+                      ["#", "Voter", "Email", "Voted For", "Time"],
+                      ...safeAudit.map((e, i) => [
+                        i + 1,
+                        e.voter_name || e.voter_id,
+                        e.voter_email || "",
+                        e.candidate,
+                        e.vote_time
+                          ? new Date(e.vote_time).toLocaleString("en-GB")
+                          : "",
+                      ]),
+                    ],
+                    "lasa_audit_log.csv"
+                  )
                 }
               >
                 Export CSV
