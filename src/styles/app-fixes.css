@@ -366,3 +366,48 @@ html, body {
     font-size: 32px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Header text visibility fixes
+═══════════════════════════════════════════════════════════════ */
+
+/* App title — bright white, always readable on dark header */
+.vs-header-title {
+  color: #FFFFFF !important;
+}
+
+/* User name badge — light text on a semi-transparent light pill */
+.vs-badge,
+.vs-header .vs-badge {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Nav tabs — readable inactive + active states on dark bar */
+.vs-tab {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.vs-tab:hover {
+  color: #FFFFFF !important;
+}
+
+.vs-tab-active {
+  color: #FFFFFF !important;
+  border-bottom-color: #00B4A6 !important;
+}
+
+/* Logout button — clear outline style on dark header */
+.vs-header .vs-btn-outline {
+  color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  background: transparent !important;
+}
+
+.vs-header .vs-btn-outline:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
