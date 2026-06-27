@@ -4,7 +4,6 @@ import "./styles/global.css";
 import "./styles/theme.css";
 import "./styles/components.css";
 import "./styles/app-fixes.css";
-import CANDIDATE_PHOTOS from "./candidatePhotos";
 
 const API = process.env.REACT_APP_API_URL || "http://localhost:5000/api"; // Adjust this if your backend runs on a different port or path
 
@@ -126,9 +125,23 @@ export default function VotingSystem() {
     }
   }, []);
 
+  // ── Load election status (synced with backend) ────────────────────────────
+  const loadElectionStatus = useCallback(async () => {
+    try {
+      const res = await fetch(`${API}/election/status`);
+      const data = await res.json();
+      if (typeof data.election_open === "boolean") {
+        setElectionOpen(data.election_open);
+      }
+    } catch (err) {
+      console.error("Failed to load election status:", err);
+    }
+  }, []);
+
   useEffect(() => {
     loadCandidates();
-  }, [loadCandidates]);
+    loadElectionStatus();
+  }, [loadCandidates, loadElectionStatus]);
 
   // ── Login — POST /api/auth/login with { email, pin } ──────────────────────
   const handleLogin = useCallback(async (email, pin) => {
@@ -313,6 +326,25 @@ export default function VotingSystem() {
   const safeCandidates = Array.isArray(candidates) ? candidates : [];
   const safeVoters = Array.isArray(voters) ? voters : [];
 
+  const toggleElection = async () => {
+    const next = !electionOpen;
+    try {
+      const res = await fetch(`${API}/election/status`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ election_open: next }),
+      });
+      const data = await res.json();
+      if (typeof data.election_open === "boolean") {
+        setElectionOpen(data.election_open);
+      } else {
+        alert("Could not update election status.");
+      }
+    } catch (err) {
+      alert("Could not reach server to update election status.");
+    }
+  };
+
   const totalVotes = safeCandidates.reduce((sum, c) => sum + (c.votes || 0), 0);
 
   return (
@@ -326,7 +358,7 @@ export default function VotingSystem() {
           {currentUser.role === "admin" && (
             <button
               className={`vs-btn ${electionOpen ? "vs-btn-danger" : "vs-btn-success"}`}
-              onClick={() => setElectionOpen((o) => !o)}
+              onClick={toggleElection}
             >
               {electionOpen ? "Close Election" : "Open Election"}
             </button>

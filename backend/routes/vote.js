@@ -1,16 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const supabase = require("../db/supabase");
+const supabase = require("../config/supabase");
 
 /**
  * POST /api/vote/cast
  * Body: { voter_id, candidate_id }
- *
- * SAFE VOTING FLOW:
- * 1. Check voter exists and hasn't voted
- * 2. Insert vote record
- * 3. Increment candidate vote count
- * 4. Mark voter as voted
  */
 router.post("/cast", async (req, res) => {
     try {
@@ -20,6 +14,27 @@ router.post("/cast", async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "Missing voter_id or candidate_id"
+            });
+        }
+
+        // 0. Check election is open
+        const { data: settings, error: settingsErr } = await supabase
+            .from("settings")
+            .select("election_open")
+            .eq("id", 1)
+            .single();
+
+        if (settingsErr) {
+            return res.status(500).json({
+                success: false,
+                message: "Could not verify election status"
+            });
+        }
+
+        if (settings && settings.election_open === false) {
+            return res.status(403).json({
+                success: false,
+                message: "The election is closed. Voting is no longer allowed."
             });
         }
 
@@ -56,7 +71,7 @@ router.post("/cast", async (req, res) => {
             });
         }
 
-        // 3. Increment candidate vote count (read-then-write, no RPC needed)
+        // 3. Increment candidate vote count (read-then-write)
         const { data: cand, error: candReadErr } = await supabase
             .from("candidates")
             .select("votes")
