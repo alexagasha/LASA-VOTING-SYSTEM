@@ -7,7 +7,7 @@ const authRoutes = require("./routes/auth");
 const voteRoutes = require("./routes/vote");
 const resultRoutes = require("./routes/results");
 
-const supabase = require("./config/supabase");
+const supabase = require("./db/supabase");
 
 const app = express();
 
