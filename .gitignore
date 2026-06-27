@@ -48,3 +48,7 @@ backend/database.db
 
 # Tell Vercel to ignore backend
 backend/node_modules/
+
+failed_emails.txt
+voter_pins_reference.csv
+sendPins.js
