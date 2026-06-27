@@ -310,6 +310,9 @@ export default function VotingSystem() {
     );
   }
 
+  const safeCandidates = Array.isArray(candidates) ? candidates : [];
+  const safeVoters = Array.isArray(voters) ? voters : [];
+
   const totalVotes = safeCandidates.reduce((sum, c) => sum + (c.votes || 0), 0);
 
   return (
